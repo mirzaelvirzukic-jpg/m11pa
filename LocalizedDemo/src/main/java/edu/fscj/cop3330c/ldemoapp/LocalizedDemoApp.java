@@ -1,6 +1,6 @@
 // LocalizedDemoApp.java
-// D. Singletary
-// 11/3/24
+// Starter code: D. Singletary
+// Updated by Mirza Zukic on 11/10/2026
 // demonstrates try-with-resources, localization, and command pattern.
 
 package edu.fscj.cop3330c.ldemoapp;
@@ -45,25 +45,13 @@ class LoadPropertiesCommand implements Command {
 
     @Override
     public void execute() {
-        FileInputStream input = null;
-
-        // replace this with try-with-resources
-        try {
-            input = new FileInputStream("config.properties");
+        try (FileInputStream input = new FileInputStream("config.properties")) {
             Properties prop = new Properties();
             prop.load(input);
             String appName = prop.getProperty("app.name");
             System.out.println(messages.getString("appName") + ": " + appName);
         } catch (IOException e) {
             System.err.println(messages.getString("error") + ": " + e.getMessage());
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    System.err.println(messages.getString("error") + " while closing: " + e.getMessage());
-                }
-            }
         }
     }
 }
@@ -71,11 +59,7 @@ class LoadPropertiesCommand implements Command {
 // Invoker class
 public class LocalizedDemoApp {
     public static void main(String[] args) {
-        // Set locale to system default or specify as needed
-        Locale locale = Locale.getDefault();
-        //Locale locale = new Locale("en", "US");
-        //Locale locale = new Locale("fr", "FR");
-        // select de/DE here after adding the properties file
+        Locale locale = new Locale("de", "DE");
 
         // Create and execute the commands
         Command displayMessages = new DisplayMessagesCommand(locale);
